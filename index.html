@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotifyLog - AI-Powered Notification Analytics</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .gradient-bg {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 60%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .logo span { color: #3b82f6; }
+
+        nav a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        nav a:hover { color: #fff; }
+
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 40px 60px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 100px;
+            font-size: 13px;
+            color: #60a5fa;
+            margin-bottom: 32px;
+        }
+
+        h1 {
+            font-size: clamp(36px, 6vw, 64px);
+            font-weight: 800;
+            line-height: 1.1;
+            color: #fff;
+            margin-bottom: 24px;
+        }
+
+        h1 .highlight {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto 48px;
+            line-height: 1.6;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 24px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-primary svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .download-note {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 12px;
+        }
+
+        .features {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            background: rgba(59, 130, 246, 0.03);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .how-it-works {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        .how-it-works h2 {
+            font-size: 36px;
+            color: #fff;
+            margin-bottom: 48px;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 32px;
+            text-align: center;
+        }
+
+        .step {
+            position: relative;
+        }
+
+        .step-number {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 auto 16px;
+        }
+
+        .step h4 {
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            font-size: 14px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        .privacy-section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .privacy-card {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .privacy-card h3 {
+            font-size: 22px;
+            color: #10b981;
+            margin-bottom: 12px;
+        }
+
+        .privacy-card p {
+            font-size: 15px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .privacy-points {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .privacy-point {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #6ee7b7;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #475569;
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: 1200px;
+            margin: 40px auto 0;
+        }
+
+        @media (max-width: 640px) {
+            nav { padding: 16px 20px; }
+            .hero { padding: 48px 20px 40px; }
+            .features { padding: 40px 20px; }
+            .how-it-works { padding: 60px 20px; }
+            .privacy-section { padding: 40px 20px; }
+            .subtitle { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-bg"></div>
+
+    <nav>
+        <div class="logo">Notify<span>Log</span></div>
+        <div style="display: flex; gap: 24px; align-items: center;">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How it Works</a>
+            <a href="#privacy">Privacy</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="badge">Android App &mdash; Free &amp; Open Source</div>
+        <h1>Every notification,<br><span class="highlight">captured &amp; analyzed</span></h1>
+        <p class="subtitle">
+            NotifyLog silently captures all your Android notifications and uses AI to turn them into actionable insights, spending summaries, and pattern detection.
+        </p>
+        <div class="cta-group">
+            <a href="https://github.com/shahrukhali1347-maker/notifylog-backend/releases/latest/download/NotifyLog.apk" class="btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Download APK
+            </a>
+            <a href="https://github.com/shahrukhali1347-maker/notifylog-backend" class="btn-secondary">
+                View Source
+            </a>
+        </div>
+        <p class="download-note">Android 8.0+ required &bull; 21 MB &bull; v1.0.0</p>
+    </section>
+
+    <section class="features" id="features">
+        <div class="feature-card">
+            <div class="feature-icon">&#128276;</div>
+            <h3>100% Notification Capture</h3>
+            <p>Intercepts every notification at the OS level &mdash; messages, transactions, deliveries, promos. Nothing is missed.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#129302;</div>
+            <h3>AI-Powered Dashboard</h3>
+            <p>One tap generates intelligent summaries, spending insights, and anomaly detection powered by GPT-4o.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128269;</div>
+            <h3>Smart Filters &amp; Search</h3>
+            <p>Create regex-based filter rules to tag, prioritize, and extract structured data like amounts and OTPs.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128737;</div>
+            <h3>Privacy First</h3>
+            <p>All notification data stored locally on your device. AI analysis only happens when you explicitly request it.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#9889;</div>
+            <h3>Always Running</h3>
+            <p>Multi-layer background reliability: foreground service, boot persistence, watchdog, and OEM-specific optimizations.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128202;</div>
+            <h3>Service Health Monitor</h3>
+            <p>Real-time heartbeat monitoring, coverage gap detection, and service uptime tracking built right in.</p>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <h2>How it works</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h4>Install &amp; Grant Access</h4>
+                <p>Download the APK and enable Notification Access in your device settings.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h4>Capture Automatically</h4>
+                <p>NotifyLog runs silently in the background, storing every notification locally.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h4>Browse Your Log</h4>
+                <p>Search, filter, and browse all your notifications with full-text search and date grouping.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h4>Generate Insights</h4>
+                <p>Tap one button to send your data to AI and get smart summaries, spending cards, and anomaly alerts.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="privacy-section" id="privacy">
+        <div class="privacy-card">
+            <h3>Your data stays yours</h3>
+            <p>NotifyLog stores all notification data in a local SQLite database on your device. Nothing is uploaded unless you explicitly tap "Generate Insights."</p>
+            <div class="privacy-points">
+                <div class="privacy-point">&#10003; Local SQLite storage</div>
+                <div class="privacy-point">&#10003; No background uploads</div>
+                <div class="privacy-point">&#10003; No ads or tracking</div>
+                <div class="privacy-point">&#10003; Open source</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 NotifyLog. Built with Android Jetpack Compose.</p>
+    </footer>
+</body>
+</html>
