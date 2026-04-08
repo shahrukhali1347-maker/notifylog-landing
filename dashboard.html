@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotifyLog - Admin Dashboard</title>
+    <style>
+        :root {
+            --primary: #4A6CF7;
+            --secondary: #7C3AED;
+            --income: #16A34A;
+            --expense: #DC2626;
+            --bg: #0F1117;
+            --surface: #1A1D27;
+            --surface2: #252836;
+            --text: #E2E4EB;
+            --text-muted: #94A3B8;
+            --text-dim: #64748B;
+            --border: rgba(255,255,255,0.06);
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+        .logo span { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .header-links { display: flex; gap: 20px; align-items: center; }
+        .header-links a { color: var(--text-muted); font-size: 14px; font-weight: 500; }
+        .header-links a:hover { color: #fff; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 32px; }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+        .stat-value { font-size: 32px; font-weight: 800; margin-top: 4px; letter-spacing: -1px; }
+        .stat-value.gradient { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+
+        .table-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            text-align: left;
+            padding: 14px 20px;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            background: var(--surface2);
+            border-bottom: 1px solid var(--border);
+        }
+        td {
+            padding: 14px 20px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border);
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(74,108,247,0.03); }
+
+        .device-name { font-weight: 600; }
+        .device-id { font-family: monospace; font-size: 11px; color: var(--text-dim); }
+        .badge-active {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge-active.green { background: rgba(22,163,74,0.12); color: var(--income); }
+        .badge-active.red { background: rgba(220,38,38,0.12); color: var(--expense); }
+        .badge-active.gray { background: rgba(100,116,139,0.12); color: var(--text-dim); }
+
+        .btn-block {
+            padding: 5px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-block:hover { border-color: var(--expense); color: var(--expense); }
+        .btn-block.blocked { border-color: var(--income); color: var(--income); }
+
+        .loading {
+            text-align: center;
+            padding: 48px;
+            color: var(--text-dim);
+        }
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px; height: 20px;
+            border: 2px solid var(--text-dim);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .empty { text-align: center; padding: 48px; color: var(--text-dim); font-size: 14px; }
+
+        .refresh-btn {
+            padding: 8px 20px;
+            background: var(--gradient);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .refresh-btn:hover { opacity: 0.9; }
+
+        @media (max-width: 640px) {
+            .container { padding: 20px; }
+            .header { padding: 16px 20px; }
+            th, td { padding: 10px 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/"><div class="logo">Notify<span>Log</span> <span style="font-size:13px;font-weight:500;color:var(--text-muted);margin-left:8px;">Dashboard</span></div></a>
+        <div class="header-links">
+            <a href="/">Landing Page</a>
+            <button class="refresh-btn" onclick="loadAll()">Refresh</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Stats -->
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Devices</div>
+                <div class="stat-value gradient" id="stat-devices">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total API Requests</div>
+                <div class="stat-value gradient" id="stat-requests">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Server Status</div>
+                <div class="stat-value" id="stat-status" style="color:var(--income);">-</div>
+            </div>
+        </div>
+
+        <!-- Devices table -->
+        <h2>Registered Devices</h2>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Device</th>
+                        <th>Device ID</th>
+                        <th>Registered</th>
+                        <th>Last Seen</th>
+                        <th>Requests</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="devices-body">
+                    <tr><td colspan="7" class="loading">Loading devices</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://notifylog-backend-ws7r.vercel.app';
+
+        async function loadHealth() {
+            try {
+                const res = await fetch(`${API_BASE}/api/health`);
+                const data = await res.json();
+                document.getElementById('stat-devices').textContent = data.devices;
+                document.getElementById('stat-requests').textContent = data.totalRequests;
+                document.getElementById('stat-status').textContent = data.status === 'ok' ? 'Online' : 'Offline';
+                document.getElementById('stat-status').style.color = data.status === 'ok' ? 'var(--income)' : 'var(--expense)';
+            } catch (e) {
+                document.getElementById('stat-status').textContent = 'Offline';
+                document.getElementById('stat-status').style.color = 'var(--expense)';
+            }
+        }
+
+        async function loadDevices() {
+            const tbody = document.getElementById('devices-body');
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/devices`);
+                const data = await res.json();
+
+                if (!data.devices || data.devices.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="empty">No devices registered yet. Install the app to get started.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.devices.map(d => `
+                    <tr>
+                        <td class="device-name">${escapeHtml(d.deviceName || 'Unknown')}</td>
+                        <td class="device-id">${d.deviceId.substring(0, 12)}...</td>
+                        <td>${formatDate(d.createdAt)}</td>
+                        <td>${formatRelative(d.lastSeenAt)}</td>
+                        <td>${d.totalRequests}</td>
+                        <td>
+                            <span class="badge-active ${d.isBlocked ? 'red' : isRecent(d.lastSeenAt) ? 'green' : 'gray'}">
+                                ${d.isBlocked ? 'Blocked' : isRecent(d.lastSeenAt) ? 'Active' : 'Inactive'}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn-block ${d.isBlocked ? 'blocked' : ''}"
+                                onclick="toggleBlock('${d.deviceId}', ${!d.isBlocked})">
+                                ${d.isBlocked ? 'Unblock' : 'Block'}
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="7" class="empty">Failed to load devices. Check API connection.</td></tr>';
+            }
+        }
+
+        async function toggleBlock(deviceId, block) {
+            try {
+                await fetch(`${API_BASE}/api/admin/devices/${deviceId}/block`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ blocked: block })
+                });
+                loadDevices();
+            } catch (e) {
+                alert('Failed to update device status');
+            }
+        }
+
+        function formatDate(ms) {
+            if (!ms) return '-';
+            return new Date(ms).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function formatRelative(ms) {
+            if (!ms) return '-';
+            const diff = Date.now() - ms;
+            const mins = Math.floor(diff / 60000);
+            if (mins < 1) return 'Just now';
+            if (mins < 60) return `${mins}m ago`;
+            const hours = Math.floor(mins / 60);
+            if (hours < 24) return `${hours}h ago`;
+            const days = Math.floor(hours / 24);
+            return `${days}d ago`;
+        }
+
+        function isRecent(ms) {
+            return ms && (Date.now() - ms) < 24 * 60 * 60 * 1000;
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function loadAll() {
+            loadHealth();
+            loadDevices();
+        }
+
+        loadAll();
+        setInterval(loadAll, 30000);
+    </script>
+</body>
+</html>
