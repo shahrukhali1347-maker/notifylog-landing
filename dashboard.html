@@ -259,7 +259,7 @@
 
         async function toggleBlock(deviceId, block) {
             try {
-                await fetch(`${API_BASE}/api/admin/devices/${deviceId}/block`, {
+                await fetch(`${API_BASE}/api/admin/devices?action=block&deviceId=${deviceId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ blocked: block })
