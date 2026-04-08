@@ -206,6 +206,7 @@
 
     <script>
         const API_BASE = 'https://notifylog-backend-ws7r.vercel.app';
+        const ADMIN_TOKEN = 'notifylog-admin-2026';
 
         async function loadHealth() {
             try {
@@ -224,7 +225,9 @@
         async function loadDevices() {
             const tbody = document.getElementById('devices-body');
             try {
-                const res = await fetch(`${API_BASE}/api/admin/devices`);
+                const res = await fetch(`${API_BASE}/api/admin/devices`, {
+                    headers: { 'X-Admin-Token': ADMIN_TOKEN }
+                });
                 const data = await res.json();
 
                 if (!data.devices || data.devices.length === 0) {
@@ -261,7 +264,7 @@
             try {
                 await fetch(`${API_BASE}/api/admin/devices?action=block&deviceId=${deviceId}`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'X-Admin-Token': ADMIN_TOKEN },
                     body: JSON.stringify({ blocked: block })
                 });
                 loadDevices();
