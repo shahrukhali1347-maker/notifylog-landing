@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotifyLog - Privacy Policy</title>
+    <style>
+        :root {
+            --primary: #4A6CF7;
+            --secondary: #7C3AED;
+            --bg: #0F1117;
+            --surface: #1A1D27;
+            --text: #E2E4EB;
+            --text-muted: #94A3B8;
+            --border: rgba(255,255,255,0.06);
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--border);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+        .logo span { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 48px 32px;
+        }
+
+        h1 {
+            font-size: 38px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+        h1 .gradient {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .updated {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-top: 36px;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        p { margin-bottom: 16px; color: var(--text-muted); font-size: 15px; }
+        ul { margin: 12px 0 16px 0; padding-left: 24px; color: var(--text-muted); font-size: 15px; }
+        li { margin-bottom: 6px; }
+        strong { color: var(--text); font-weight: 600; }
+
+        .highlight-box {
+            background: rgba(74,108,247,0.08);
+            border: 1px solid rgba(74,108,247,0.2);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+        .highlight-box p { margin: 0; color: var(--text); }
+
+        footer {
+            text-align: center;
+            padding: 32px;
+            color: #64748B;
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+            margin-top: 48px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/"><div class="logo">Notify<span>Log</span></div></a>
+        <a href="/" style="color: var(--text-muted); font-size: 14px;">← Back to home</a>
+    </div>
+
+    <div class="container">
+        <h1>Privacy <span class="gradient">Policy</span></h1>
+        <p class="updated">Last updated: April 8, 2026</p>
+
+        <div class="highlight-box">
+            <p><strong>Summary:</strong> NotifyLog stores all your notification data locally on your device. We don't sell your data, show ads, or track you. Your notification content is only sent to our AI servers when you explicitly tap "Generate Insights".</p>
+        </div>
+
+        <h2>1. What information we collect</h2>
+
+        <h3>Notification data (collected on your device only)</h3>
+        <p>When you grant Notification Access permission, NotifyLog reads notifications posted to your Android system. We capture:</p>
+        <ul>
+            <li>Notification title and body text</li>
+            <li>The originating app's package name and label</li>
+            <li>Timestamp of when the notification arrived</li>
+            <li>Notification category (set by the originating app)</li>
+            <li>Any extras the app includes (e.g. group key, priority)</li>
+        </ul>
+        <p>This data is stored in a local SQLite database on your device and never leaves it without your explicit consent.</p>
+
+        <h3>Financial transaction data</h3>
+        <p>NotifyLog automatically detects financial transactions from bank SMS and payment app notifications using on-device regex patterns. Detected transactions are stored locally and include:</p>
+        <ul>
+            <li>Transaction amount, type (debit/credit), bank name, and merchant/payee</li>
+            <li>Account number (as masked by your bank, e.g. ****1234)</li>
+            <li>Reference number, balance, transaction time</li>
+            <li>Spending category (food, travel, mobile, etc.)</li>
+        </ul>
+        <p>Financial classification runs entirely offline — no notification content is sent anywhere during this process.</p>
+
+        <h3>Device identifier</h3>
+        <p>When you tap "Generate Insights" for the first time, we generate a random UUID to identify your device. This UUID is sent with future AI analysis requests for rate limiting and abuse prevention. It is not linked to your name, email, phone number, or device hardware identifiers.</p>
+
+        <h2>2. How we use your information</h2>
+
+        <ul>
+            <li><strong>Local display</strong>: Show your notifications and transactions in the app</li>
+            <li><strong>Financial analysis</strong>: Detect, categorize, and summarize transactions on your device</li>
+            <li><strong>AI insights (opt-in)</strong>: When you tap "Generate Insights", filtered notification metadata is sent to our backend, which forwards it to OpenAI's GPT-4o for analysis. The response is returned and shown in the app.</li>
+            <li><strong>App management</strong>: Track which apps send notifications so you can block ones you don't want logged</li>
+        </ul>
+
+        <h2>3. Data we do NOT collect</h2>
+
+        <ul>
+            <li>Your name, email, phone number, or contact list</li>
+            <li>Location data</li>
+            <li>Device hardware identifiers (IMEI, Android ID)</li>
+            <li>Browsing history or app usage outside of notifications</li>
+            <li>Photos, videos, or files</li>
+            <li>Microphone or camera input</li>
+        </ul>
+
+        <h2>4. Data storage and security</h2>
+
+        <p><strong>On your device:</strong> All notification and transaction data is stored in an encrypted local SQLite database. You can clear all data anytime via Settings → Delete All My Data.</p>
+
+        <p><strong>On our servers:</strong> When you use AI insights, the backend (hosted on Vercel) receives notification metadata briefly for the duration of the API call. We do NOT log or store the notification content on our servers — only the device UUID, request count, and token usage are logged for rate limiting.</p>
+
+        <p><strong>Third parties:</strong> AI requests are forwarded to OpenAI under their <a href="https://openai.com/policies/api-data-usage-policies" target="_blank">API data usage policy</a>. OpenAI does not use API data for model training. No other third parties receive your data.</p>
+
+        <h2>5. Your rights and controls</h2>
+
+        <p>You have full control over your data:</p>
+        <ul>
+            <li><strong>Delete all data</strong>: Settings → Delete All My Data (irreversible)</li>
+            <li><strong>Disable capture</strong>: Revoke Notification Access in Android Settings → Notifications</li>
+            <li><strong>Block specific apps</strong>: App Management screen lets you exclude apps from being logged</li>
+            <li><strong>Configure retention</strong>: Set how long notifications are kept (7, 30, 90, or 365 days)</li>
+            <li><strong>Skip AI features</strong>: The app works fully without ever using AI insights</li>
+            <li><strong>Uninstall</strong>: Removing the app deletes all locally stored data</li>
+        </ul>
+
+        <h2>6. Children's privacy</h2>
+        <p>NotifyLog is not intended for use by children under 13. We do not knowingly collect data from children.</p>
+
+        <h2>7. Changes to this policy</h2>
+        <p>We may update this policy as the app evolves. Material changes will be announced in-app. The "Last updated" date at the top reflects the latest version.</p>
+
+        <h2>8. Contact</h2>
+        <p>Questions about this privacy policy or your data can be sent to:<br>
+        <a href="mailto:careers@vanarchain.com">careers@vanarchain.com</a></p>
+
+        <p>Source code is publicly available at <a href="https://github.com/shahrukhali1347-maker/notifylog-backend" target="_blank">GitHub</a> for full transparency.</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 NotifyLog • <a href="/">Home</a> • <a href="/dashboard.html">Dashboard</a></p>
+    </footer>
+</body>
+</html>
